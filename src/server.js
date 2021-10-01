@@ -1,4 +1,5 @@
 import express from "express";
+import userRouter from "./service/user/index.js";
 
 import cors from "cors";
 
@@ -14,7 +15,9 @@ server.use(cors());
 
 server.use(express.json());
 
-console.log(listEndpoints(server));
+server.use("/users", userRouter);
+
+console.table(listEndpoints(server));
 
 server.listen(PORT, async () => {
   try {
