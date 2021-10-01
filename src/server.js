@@ -10,7 +10,7 @@ const server = express();
 
 const { PORT, MONGO_CONNECTION_STRING } = process.env;
 
-server.use(cors(corsOptions));
+server.use(cors());
 
 server.use(express.json());
 
