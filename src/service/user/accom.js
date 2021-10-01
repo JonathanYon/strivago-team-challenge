@@ -44,4 +44,20 @@ usersRouter.put("/accommodation/:id", async (req, res, next) => {
   }
 });
 
+usersRouter.delete("/accommodation/:id", async (req, res, next) => {
+  try {
+    const accommodation = await accoModel.findOneAndDelete({
+      _id: req.params.id,
+      host: req.user._id,
+    });
+    if (accommodation) {
+      res.send("🏌️‍♀️ Gone for good!!");
+    } else {
+      next(createHttpError(401, `💀 Unauthorized to delete this!!`));
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default usersRouter;
