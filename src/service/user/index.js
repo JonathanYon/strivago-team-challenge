@@ -1,7 +1,7 @@
 import { Router } from "express";
 import createHttpError from "http-errors";
 import { JWTAuthMiddleware } from "../../auth/token.js";
-import { JWTAuthenticate } from "../../auth/tools.js";
+import { JWTAuthenticate, verifyRefresh } from "../../auth/tools.js";
 import userModel from "../user/schema.js";
 import accoModel from "../accommodation/schema.js";
 
@@ -36,8 +36,10 @@ userRouter.post("/login", async (req, res, next) => {
     const userFound = await userModel.checkUser(email, password);
 
     if (userFound) {
-      const accessToken = await JWTAuthenticate(userFound);
-      res.send({ accessToken });
+      const { tokenGenerate, refreshTokenGenerate } = await JWTAuthenticate(
+        userFound
+      );
+      res.send({ tokenGenerate, refreshTokenGenerate });
       next();
     } else {
       console.log("Credentials are not ok!");
@@ -48,6 +50,19 @@ userRouter.post("/login", async (req, res, next) => {
   }
 });
 
+userRouter.post("/refreshToken", async (req, res, next) => {
+  try {
+    const { actualRefreshToken } = req.body;
+
+    const { tokenGenerate, refreshToken } = await verifyRefresh(
+      actualRefreshToken
+    );
+
+    res.send({ tokenGenerate, refreshToken });
+  } catch (error) {
+    console.log(error);
+  }
+});
 userRouter.get(
   "/me/accommodation",
   JWTAuthMiddleware,

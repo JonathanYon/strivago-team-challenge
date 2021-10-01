@@ -7,6 +7,7 @@ const userSchema = new Schema(
     surname: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
+    refreshToken: { type: String },
     role: {
       type: String,
       required: true,
