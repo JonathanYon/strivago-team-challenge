@@ -12,7 +12,7 @@ server.use(express.json());
 
 server.use("/users", usersRouter);
 
-console.log(listEndpoints(server));
+console.table(listEndpoints(server));
 server.listen(PORT, async () => {
   try {
     await mongoose.connect(MONGO_CONNECTION_STRING, {
