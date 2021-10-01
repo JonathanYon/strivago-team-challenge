@@ -1,9 +1,11 @@
-import express from "express";
+import { Router } from "express";
+import createHttpError from "http-errors";
 import { JWTAuthMiddleware } from "../../auth/token.js";
 import { JWTAuthenticate } from "../../auth/tools.js";
 import userModel from "../user/schema.js";
+import accoModel from "../accommodation/schema.js";
 
-const userRouter = express.Router();
+const userRouter = Router();
 
 userRouter.post("/register", async (req, res, next) => {
   const registerUser = await userModel.create(req.body);
@@ -45,5 +47,73 @@ userRouter.post("/login", async (req, res, next) => {
     console.log(error);
   }
 });
+
+userRouter.get(
+  "/me/accommodation",
+  JWTAuthMiddleware,
+  async (req, res, next) => {
+    try {
+      const accommodation = await accoModel.find({ host: req.user._id });
+      res.send(accommodation);
+    } catch (error) {
+      next(
+        createHttpError(
+          404,
+          `😔Sorry ${req.user.name} we could NOT find your accommodation!!`
+        )
+      );
+    }
+  }
+);
+
+userRouter.post("/accommodation", JWTAuthMiddleware, async (req, res, next) => {
+  try {
+    const accommodation = await accoModel(req.body).seve();
+    res.send(accommodation);
+  } catch (error) {
+    next(error);
+  }
+});
+
+userRouter.put(
+  "/accommodation/:id",
+  JWTAuthMiddleware,
+  async (req, res, next) => {
+    try {
+      const accommodation = await accoModel.findOneAndUpdate(
+        { _id: req.params.id, host: req.user._id },
+        { ...req.body },
+        { new: true }
+      );
+      if (accommodation) {
+        res.send(accommodation);
+      } else {
+        next(createHttpError(401, `💀 You are Unauthorized to change this`));
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+userRouter.delete(
+  "/accommodation/:id",
+  JWTAuthMiddleware,
+  async (req, res, next) => {
+    try {
+      const accommodation = await accoModel.findOneAndDelete({
+        _id: req.params.id,
+        host: req.user._id,
+      });
+      if (accommodation) {
+        res.send("🏌️‍♀️ Gone for good!!");
+      } else {
+        next(createHttpError(401, `💀 Unauthorized to delete this!!`));
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default userRouter;
