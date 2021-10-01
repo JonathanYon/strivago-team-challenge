@@ -23,4 +23,14 @@ userSchema.pre("save", async function (next) {
   }
   next();
 });
+
+userSchema.statics.checkUser = async function (email, userPassword) {
+  const findUser = await this.findOne({ email });
+
+  if (await bcrypt.compare(userPassword, findUser.password)) {
+    return findUser;
+  } else {
+    return null;
+  }
+};
 export default model("User", userSchema);
