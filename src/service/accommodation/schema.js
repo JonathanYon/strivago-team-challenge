@@ -1,13 +1,14 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 
 const accommodationSchema = new Schema(
   {
     name: { type: String, required: true },
+    surname: { type: String, required: true },
     host: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "User",
+      ref: 'User',
     },
     maxGuests: { type: Number, required: true },
     city: { type: String, required: true },
@@ -16,4 +17,4 @@ const accommodationSchema = new Schema(
   { timestamps: true }
 );
 
-export default model("Accommodation", accommodationSchema);
+export default model('Accommodation', accommodationSchema);

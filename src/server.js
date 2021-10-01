@@ -5,15 +5,24 @@ import userRouter from './service/user/index.js';
 import cors from 'cors';
 import listEndpoints from 'express-list-endpoints';
 import mongoose from 'mongoose';
+import accomodationsRouter from './service/accommodation/index.js';
+import { errorMiddlewares } from './errorMiddlewares.js';
 // import usersRouter from "./service/user/accom.js";
 
 const server = express();
 const { PORT, MONGO_CONNECTION_STRING } = process.env;
 
+// ******************** MIDDLEWARES *************************+
+
 server.use(cors());
 server.use(express.json());
 
+// ******************** ROUTES ******************************
 server.use('/users', userRouter);
+server.use('/accomodation', accomodationsRouter);
+
+// ********************** ERROR HANDLERS *************************
+server.use([errorMiddlewares]);
 
 console.table(listEndpoints(server));
 server.listen(PORT, async () => {
