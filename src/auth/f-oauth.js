@@ -28,6 +28,7 @@ const facebookStrategy = new FacebookStrategy(
         const token = jwt.sign(
           {
             id: user._id,
+            name: user.name
           },
           process.env.JWT_SECRET,
           {
@@ -52,6 +53,7 @@ const facebookStrategy = new FacebookStrategy(
         const token = jwt.sign(
           {
             id: savedUser._id,
+            name: savedUser.name
           },
           process.env.JWT_SECRET,
           {

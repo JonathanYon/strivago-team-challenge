@@ -76,10 +76,10 @@ userRouter.get(
     try {
       console.log("redirect");
       console.log(req.user.token);
-      // res.cookie("token", req.user.token, {
-      //   //httpOnly: true,
-      // })
-      res.redirect(`http://localhost:3003`);
+      res.cookie("token", req.user.token, {
+        //httpOnly: true,
+      })
+      res.redirect(`${process.env.FRONTEND_URL}`);
     } catch (error) {
       next(error);
     }
