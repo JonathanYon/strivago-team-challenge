@@ -27,4 +27,21 @@ usersRouter.post("/accommodation", async (req, res, next) => {
   }
 });
 
+usersRouter.put("/accommodation/:id", async (req, res, next) => {
+  try {
+    const accommodation = await accoModel.findOneAndUpdate(
+      { _id: req.params.id, host: req.user._id },
+      { ...req.body },
+      { new: true }
+    );
+    if (accommodation) {
+      res.send(accommodation);
+    } else {
+      next(createHttpError(401, `💀 You are Unauthorized to change this`));
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default usersRouter;
