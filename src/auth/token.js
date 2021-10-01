@@ -1,15 +1,15 @@
-import createHttpError from "http-errors";
-import { verifyJWT } from "./tools.js";
-import userModel from "../service/user/schema.js";
+import createHttpError from 'http-errors';
+import { verifyJWT } from './tools.js';
+import userModel from '../service/user/schema.js';
 
 export const JWTAuthMiddleware = async (req, res, next) => {
   // console.log(req.headers.authorization);
 
   if (!req.headers.authorization) {
-    next(createHttpError("Please provide credentials in the header!"));
+    next(createHttpError('Please provide credentials in the header!'));
   } else {
     try {
-      const token = req.headers.authorization.replace("Bearer ", "");
+      const token = req.headers.authorization.replace('Bearer ', '');
 
       const decodedToken = await verifyJWT(token);
 
@@ -19,10 +19,10 @@ export const JWTAuthMiddleware = async (req, res, next) => {
         req.user = user;
         next();
       } else {
-        next(createHttpError(404, "User not found"));
+        next(createHttpError(404, 'User not found'));
       }
     } catch (error) {
-      next(createHttpError(401, "Token not valid"));
+      next(createHttpError(401, 'Token not valid'));
     }
   }
 };
