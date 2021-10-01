@@ -18,4 +18,13 @@ usersRouter.get("/me/accommodation", async (req, res, next) => {
   }
 });
 
+usersRouter.post("/accommodation", async (req, res, next) => {
+  try {
+    const accommodation = await accoModel(req.body).seve();
+    res.send(accommodation);
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default usersRouter;
