@@ -13,10 +13,10 @@ export const JWTAuthMiddleware = async (req, res, next) => {
 
       const decodedToken = await verifyJWT(token);
 
-      const findUser = await userModel.findById(decodedToken._id);
+      const user = await userModel.findById(decodedToken._id);
 
-      if (findUser) {
-        req.user = findUser;
+      if (user) {
+        req.user = user;
         next();
       } else {
         next(createHttpError(404, "User not found"));
