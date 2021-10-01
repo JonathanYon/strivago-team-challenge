@@ -6,14 +6,14 @@ const userSchema = new Schema(
     name: { type: String, required: true },
     surname: { type: String, required: true },
     email: { type: String, required: true },
-    password: { type: String, required: true },
-    refreshToken: { type: String },
+    password: { type: String },
     role: {
       type: String,
       required: true,
       enum: ["host", "guest"],
       default: "guest",
     },
+    facebookId: { type: String },
   },
   { timestamps: true }
 );

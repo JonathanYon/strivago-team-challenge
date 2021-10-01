@@ -4,6 +4,7 @@ import { JWTAuthMiddleware } from "../../auth/token.js";
 import { JWTAuthenticate, verifyRefresh } from "../../auth/tools.js";
 import userModel from "../user/schema.js";
 import accoModel from "../accommodation/schema.js";
+import passport from "passport";
 
 const userRouter = Router();
 
@@ -63,6 +64,38 @@ userRouter.post("/refreshToken", async (req, res, next) => {
     console.log(error);
   }
 });
+userRouter.get(
+  "/auth/facebook",
+  passport.authenticate("facebook", { scope: ["email"] })
+); //this will be used for login route and we are going to send our users to this route to login
+//after successfully logged in facebook will redirect to below routes
+userRouter.get(
+  "/auth/facebook/secrets",
+  passport.authenticate("facebook"),
+  async (req, res, next) => {
+    try {
+      console.log("redirect");
+      console.log(req.user.token);
+      // res.cookie("token", req.user.token, {
+      //   //httpOnly: true,
+      // })
+      res.redirect(`http://localhost:3003`);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// passport.authenticate("facebook"), async (req, res, next) => {
+
+// }
+// function (req, res) {
+//   console.log(req);
+//   // Successful authentication, redirect home.
+//   res.redirect("/");
+// }
+// );
+
 userRouter.get(
   "/me/accommodation",
   JWTAuthMiddleware,
