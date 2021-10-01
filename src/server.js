@@ -1,24 +1,21 @@
 import express from "express";
+
 import userRouter from "./service/user/index.js";
 
 import cors from "cors";
-
 import listEndpoints from "express-list-endpoints";
-
 import mongoose from "mongoose";
+// import usersRouter from "./service/user/accom.js";
 
 const server = express();
-
 const { PORT, MONGO_CONNECTION_STRING } = process.env;
 
 server.use(cors());
-
 server.use(express.json());
 
 server.use("/users", userRouter);
 
 console.table(listEndpoints(server));
-
 server.listen(PORT, async () => {
   try {
     await mongoose.connect(MONGO_CONNECTION_STRING, {

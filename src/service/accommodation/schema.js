@@ -4,7 +4,11 @@ const { Schema, model } = mongoose;
 const accommodationSchema = new Schema(
   {
     name: { type: String, required: true },
-    host: { type: String, ref: "" },
+    host: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
     maxGuests: { type: Number, required: true },
     city: { type: String, required: true },
     description: { type: String, required: true },
