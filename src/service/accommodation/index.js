@@ -2,7 +2,7 @@ import express from 'express';
 import createHttpError from 'http-errors';
 //middle
 import { JWTAuthMiddleware } from '../../auth/token.js';
-import adminCheck from './adminCheck.js';
+import { adminCheck } from './adminCheck.js';
 //schema
 import AccommodationModel from './schema.js';
 
@@ -10,7 +10,7 @@ const accomodationsRouter = express.Router();
 
 accomodationsRouter.get('/', JWTAuthMiddleware, async (req, res, next) => {
   try {
-    const accomodation = await AccommodationModel.find();
+    const accomodation = await AccommodationModel.find().populate('host');
     //.populate("xxx")
     res.send(accomodation);
   } catch (error) {
@@ -21,7 +21,9 @@ accomodationsRouter.get('/', JWTAuthMiddleware, async (req, res, next) => {
 
 accomodationsRouter.get('/:id', JWTAuthMiddleware, async (req, res, next) => {
   try {
-    const accomodation = await AccommodationModel.findById(req.params.id);
+    const accomodation = await AccommodationModel.findById(
+      req.params.id
+    ).populate('host');
     //.populate("xxx")
 
     if (accomodation) {
