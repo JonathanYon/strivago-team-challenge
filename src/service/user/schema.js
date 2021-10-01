@@ -26,7 +26,7 @@ userSchema.pre("save", async function (next) {
 
 userSchema.statics.checkUser = async function (email, userPassword) {
   const findUser = await this.findOne({ email });
-
+  console.log(findUser.email, findUser.password);
   if (await bcrypt.compare(userPassword, findUser.password)) {
     return findUser;
   } else {

@@ -9,7 +9,7 @@ export const JWTAuthMiddleware = async (req, res, next) => {
     next(createHttpError("Please provide credentials in the header!"));
   } else {
     try {
-      const token = req.headers.authorization.replace("Bearer", "");
+      const token = req.headers.authorization.replace("Bearer ", "");
 
       const decodedToken = await verifyJWT(token);
 

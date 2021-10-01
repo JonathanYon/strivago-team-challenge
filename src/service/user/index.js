@@ -68,7 +68,7 @@ userRouter.get(
 
 userRouter.post("/accommodation", JWTAuthMiddleware, async (req, res, next) => {
   try {
-    const accommodation = await accoModel(req.body).seve();
+    const accommodation = await accoModel(req.body).save();
     res.send(accommodation);
   } catch (error) {
     next(error);
@@ -85,6 +85,7 @@ userRouter.put(
         { ...req.body },
         { new: true }
       );
+      console.log(req.params.id, req.user._id);
       if (accommodation) {
         res.send(accommodation);
       } else {
@@ -105,6 +106,7 @@ userRouter.delete(
         _id: req.params.id,
         host: req.user._id,
       });
+      console.log(req.params.id, req.user._id);
       if (accommodation) {
         res.send("🏌️‍♀️ Gone for good!!");
       } else {
